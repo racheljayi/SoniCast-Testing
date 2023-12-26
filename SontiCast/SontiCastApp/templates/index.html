@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rachel Jan</title>
+</head>
+<body>
+<div class="home">
+    <div class="text">
+        <div class="title">Rachel Jan</div>
+        <div class="subtitle">> Computer Science Student</div>
+        <div class="body">Hi! I'm an <span class="accentBody">undergraduate</span> computer science
+            student currently based in <span class="accentBody">Pittsburgh</span>. My
+            career interests include <span class="accentBody">software engineering</span>,
+            machine learning and AI, and <span class="accentBody">game
+            development</span>. Thanks for stopping by!</div>
+    </div>
+    <form action="{% url 'login' %}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Submit">
+    </form>
+</div>
+</body>
+</html>
