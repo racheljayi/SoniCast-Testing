@@ -68,7 +68,7 @@ def callback(request):
          else: # TODO 
              # remove client_ip for testing & replace with proper error message
              print("not routable")
-             client_ip = '47.189.84.176'
+             client_ip = '185.249.71.82'
     
     # get location information
      try:
@@ -87,5 +87,8 @@ def callback(request):
 def results(request):
     # get recommendations
     forecast = util.request_forecast(request.session["user_id"])
-    print(forecast)
+    weather_perms = util.make_parameters(forecast)
+    print(weather_perms)
+    #recommendations = util.make_recommendations(request.session["user_id"], weather_perms=weather_perms)
+
     return render(request, "results.html")    

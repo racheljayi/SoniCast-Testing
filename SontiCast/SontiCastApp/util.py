@@ -76,9 +76,8 @@ def request_user_spotify_id(access_token):
         return({'Error': 'Retriving user failed'})
 
 # catch all method for making Spotify API calls
-def make_API_call(user_id, endpoint, params='', post=False, put=False):
-    user = get_user(user_id)
-    headers['Authorization'] = "Bearer " + user.access_token
+def make_API_call(access_token, endpoint, params='', post=False, put=False):
+    headers['Authorization'] = "Bearer " + access_token
     if post:
        requests.post(url = BASE_ADDRESS + endpoint, headers=headers, params=params)
     if put:
@@ -89,11 +88,64 @@ def make_API_call(user_id, endpoint, params='', post=False, put=False):
         return response.json()
     except:
         return({'Error': 'API call failed'})
+
+# make recoomendations for user given weather parameters. returns an array of song objects
+def make_recommendations(user_id, weather_perms):
+    user = get_user(user_id)
+
+    if user is not None: 
+        access_token = user.access_token
+
+        # get top 2 artists
+        endpoint = "v1/me/top/artists"
+        params = {
+            "offset":1
+        }
+        artists = make_API_call(access_token=access_token, endpoint=endpoint).items.id + "," + make_API_call(access_token
+            =access_token, endpoint=endpoint, params=params).items.id
+
+        # get top 3 tracks
+        endpoint = "v1/me/top/tracks"
+        offsets1 = {
+            "offset":1
+        }
+        offsets2 = {
+            "offset":2
+        }
+        tracks = make_API_call(access_token=access_token, endpoint=endpoint).items.id + "," + make_API_call(access_token=access_token, endpoint
+            =endpoint, params=offsets1).items.id + "," + make_API_call(access_token=access_token, endpoint=endpoint, params=
+            offsets2).items.id
+
+        params = {
+            #TODO
+            "seed_artists": artists,
+            "seed_tracks": tracks
+        }
+        return None
+    else: return({'Error': 'User not found'})
+
+# define parameters for track recommendations based on weather   
+def make_parameters(forecast):
+    parameters = {}
+    acousticness = 1 - round(forecast['vis_miles'] * 0.11, 3)   # visibility = acousticness 
+    tempo = round(forecast['wind_mph'] * 7, 3) + 60     # windiness = tempo
+    valence = 1 - round(forecast['cloud'] * 0.007, 3) - 0.1     # more cloudiness = lower valence 
+
+    if (forecast['is_day']):
+        energy = round(forecast['uv'] * 0.2, 3) - 0.1     # uv = energy (only included if is_day)
+        parameters["target_energy"] = energy
+    else:
+        acousticness += 0.3
     
-# def make_parameters(user_id)
-    # the big boy method
-    # make parameters for recommendataions
-    # seed top artists, genres, & tracks, and make weather rules to add to seeded genres as well
-    # as to adjust other parameters
+    if (forecast['precip_in'] != 0.0):
+            mode = 1    # mode is minor (only included if there is percipitation)
+            parameters["target_mode"] = mode
+    
+    parameters["target_acousticness"] = acousticness
+    parameters["target_tempo"] = tempo
+    parameters["target_valence"] = valence
+    
+    # day of week & time => dancibility 
+    return parameters
 
 # def refresh_user_token
