@@ -88,7 +88,9 @@ def results(request):
     # get recommendations
     forecast = util.request_forecast(request.session["user_id"])
     weather_perms = util.make_parameters(forecast)
-    print(weather_perms)
-    #recommendations = util.make_recommendations(request.session["user_id"], weather_perms=weather_perms)
+    recommendations = util.make_recommendations(request.session["user_id"], weather_perms=weather_perms)
+    # print(recommendations)
+    weather = "cloudy thursday afternoon"
+    # util.make_playlist(user_id=request.session["user_id"], tracks=recommendations, weather=weather)
 
     return render(request, "results.html")    
