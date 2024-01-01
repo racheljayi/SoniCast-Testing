@@ -2,23 +2,59 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Rachel Jan</title>
+    <title>SoniCast</title>
 </head>
+{% load static %}
+<link rel="stylesheet" href="{% static random_css %}">
+<link rel="stylesheet" href="{% static 'index.css' %}">
 <body>
+<div class="welcome_text">
+    > press play to start <
+</div>
 <div class="home">
-    <div class="text">
-        <div class="title">Rachel Jan</div>
-        <div class="subtitle">> Computer Science Student</div>
-        <div class="body">Hi! I'm an <span class="accentBody">undergraduate</span> computer science
-            student currently based in <span class="accentBody">Pittsburgh</span>. My
-            career interests include <span class="accentBody">software engineering</span>,
-            machine learning and AI, and <span class="accentBody">game
-            development</span>. Thanks for stopping by!</div>
+    <div class="main">
+        <div class="title">SoniCast</div>
+        <div class="subtitle">> soundtracks for the weather</div>
+        <div class="playback">
+            <rect class="played"></rect>
+            <circle class="cursor"></circle>
+            <rect class="unplayed"></rect>
+        </div>
+        <div id="box">
+            <a href = 'JavaScript: location.reload(true);'>
+                <img class="icon" src="../static/images/shuffle.png"/>
+            </a>
+            <input id="about" type="checkbox"></input>
+            <label for="about">
+                <img class="icon" src="../static/images/back.png"/>
+            </label>
+            <div class="circle">
+                <form action="{% url 'login' %}" method="post">
+                    {% csrf_token %}
+                    <button class="material-symbols-outlined" id="submit" value="">
+                        play_arrow
+                        </button>
+                </form>
+            </div>
+            <input id="stats" type="checkbox"></input>
+            <label for="stats">
+                <img class="icon" src="../static/images/forward.png"/>
+            </label>
+            <input id="support" type="checkbox"></input>
+            <label for="support">
+                <img class="icon" src="../static/images/loop.png"/>
+            </label>
+        </div>
+        <div class="about">
+
+        </div>
+        <div class="stats">
+
+        </div>
+        <div class="support">
+            
+        </div>
     </div>
-    <form action="{% url 'login' %}" method="post">
-        {% csrf_token %}
-        <input type="submit" value="Submit">
-    </form>
 </div>
 </body>
 </html>

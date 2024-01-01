@@ -1,5 +1,6 @@
 from .models import User
-import requests, environ, json
+from datetime import datetime
+import requests, environ, json, pytz
 
 BASE_ADDRESS = "https://api.spotify.com"
 headers = {
@@ -107,6 +108,18 @@ def request_user_spotify_id(access_token):
     except:
         return({'Error': 'Retriving user failed'})
 
+def request_user_time_zone(user_id):
+     user = get_user(user_id)
+     params = {
+        'key': env("WEATHER_API_KEY"),
+        'q': user.city + ", " + user.region + ", " + user.country
+    }
+     response = requests.get(url="http://api.weatherapi.com/v1/timezone.json", params=params)
+     try:
+         return response.json()['location']['tz_id']
+     except:
+         return({'Error': 'Retriving timezone failed'})
+
 # catch all method for making Spotify API calls
 def make_API_call(access_token, endpoint, params='', data='', post=False, put=False):
     headers['Authorization'] = "Bearer " + access_token
@@ -183,8 +196,8 @@ def make_playlist(user_id, tracks, weather):
         access_token = user.access_token
         endpoint = "/v1/users/" + user.user_spotify_id + "/playlists"
         data = json.dumps({
-            "name": "a " + weather,
-            "description": "a SontiCast playlist. Updates every 3 hours.",
+            "name": weather,
+            "description": "a SoniCast playlist. Updates every [] hours.",
             "public": False
         })
         playlist = make_API_call(access_token=access_token, endpoint=endpoint, data=data, post=True)["id"]
@@ -193,5 +206,39 @@ def make_playlist(user_id, tracks, weather):
         #update_playlist_cover(access_token=access_token, playlist=playlist)
         update_playlist(access_token=access_token, tracks=tracks, playlist=playlist)
 
-# def describe_weather
+# reformats text describing weather
+def describe_weather(forecast, user_id):
+    code = forecast['condition']['code']
+    weather = ""
+    if code in range(1000, 1010):
+        weather = forecast['text']
+    if code == 1030:
+        weather = "misty"
+    if code == 1063 or code in range(1180, 1202) or code in range(1240, 1253) or code in range(1273, 1277):
+        weather = "rainy"
+    if code == 1066 or code in range(1114, 1118) or code in range(1204, 1226) or code in range(1255, 
+        1259) or code in range(1279, 1283):
+        weather == "snowy"
+    if code in range(1069, 1073) or code == 1237 or code in range(1261, 1265):
+        weather == "freezing"
+    if code == 1087:
+        weather == "thundery"
+    if code in range(1135, 1148):
+        weather == "foggy"
+    if code in range(1150, 1172):
+        weather == "drizzling"
+    tz = pytz.timezone(request_user_time_zone(user_id))
+    dt = datetime.now(tz)
+    day = dt.strftime('%A')
+    time = (dt.strftime("%-H"))
+    print(time)
+    time_of_day = "morning"
+    if (time > 11):
+        time_of_day = "afternoon"
+    if (time > 16):
+        time_of_day = "evening"
+    weather = weather + " " + day + " " + time_of_day
+    weather.lower()
+    return weather
+
 # def refresh_user_token

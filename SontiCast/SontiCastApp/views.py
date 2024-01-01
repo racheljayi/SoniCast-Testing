@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-import environ, requests, json, base64
+import environ, requests, json, base64, random
 
 from .models import User
 from . import util
@@ -18,7 +18,9 @@ REDIRECT_URI = "http://localhost:8000/callback"
 
 # load home page
 def index(request):
-    return render(request, "index.html")
+    #random_css = random.choice(['sunrise-stylesheet.css', 'fog-stylesheet.css'])
+    random_css = 'color-schemes/' + 'sunrise-stylesheet.css'
+    return render(request, "index.html", {'random_css': random_css})
 
 # request user authorization
 @api_view(['GET', 'POST'])
@@ -89,8 +91,9 @@ def results(request):
     forecast = util.request_forecast(request.session["user_id"])
     weather_perms = util.make_parameters(forecast)
     recommendations = util.make_recommendations(request.session["user_id"], weather_perms=weather_perms)
-    # print(recommendations)
-    weather = "cloudy thursday afternoon"
+    weather = "a " + util.describe_weather(forecast, request.session["user_id"])
+    temperature = str(forecast['temp_c']) + "°C / " + str(forecast['temp_f']) + "°F"
+    icon = forecast['condition']['icon']
     # util.make_playlist(user_id=request.session["user_id"], tracks=recommendations, weather=weather)
 
-    return render(request, "results.html")    
+    return render(request, "results.html", {'tracks':recommendations, 'weather':weather, 'temperature':temperature, 'icon':icon})    

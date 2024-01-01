@@ -2,14 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Rachel Jan</title>
+    <title>SoniCast</title>
 </head>
+{% load static %}
+<link rel="stylesheet" href="{% static 'results.css' %}">
 <body>
 <div class="home">
     <div class="text">
-        <div class="title">Rachel Jan</div>
-        <div class="subtitle">> Computer Science Student</div>
-        <div class="body">This is the results page!</div>
+        <div class="welcome">Hi {{ name }}</div>
+        <div class="subtitle">Here's some music for {{ weather }}.</div>
+        <div class="temperature">{{ temperature }}</div>
+    </div>
+    <div class="grid">
+        {% for track in tracks %}
+        <div class = "track">
+            <img class="cover" src={{track.cover_url}} + ".png" />
+            <div class="title">{{track.name}}</div>
+            {% for artist in track.artist %}
+            <span class="artist">{{artist}} </span>
+            {% endfor %}
+        </div>
+        {% endfor %}
     </div>
 </div>
 </body>
