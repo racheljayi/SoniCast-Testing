@@ -230,8 +230,7 @@ def describe_weather(forecast, user_id):
     tz = pytz.timezone(request_user_time_zone(user_id))
     dt = datetime.now(tz)
     day = dt.strftime('%A')
-    time = (dt.strftime("%-H"))
-    print(time)
+    time = int((dt.strftime("%-H")))
     time_of_day = "morning"
     if (time > 11):
         time_of_day = "afternoon"

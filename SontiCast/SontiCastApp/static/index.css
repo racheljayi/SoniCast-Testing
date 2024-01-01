@@ -149,8 +149,6 @@ label{
 
     .title{
         font-size: 6em;
-        word-break: break-all;
-        animation: none
     }
 
     .subtitle{
@@ -166,7 +164,7 @@ label{
     }
 }
 
-@media (max-height: 500px){
+@media (max-height: 700px){
     .main{
         top:20%
     }
