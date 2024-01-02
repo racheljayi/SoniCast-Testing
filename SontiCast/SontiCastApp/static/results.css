@@ -5,9 +5,10 @@
     --text-color-2: #4d572d;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz@6..12&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300&display=swap');
 @font-face { 
     font-family: Mystequ; src: url('fonts/mystequ.otf'); 
+    font-family: BigJohn; src: url('fonts/BigJohnPRO.otf');
 } 
 
 body, html{
@@ -36,7 +37,7 @@ body, html{
 .subtitle{
     margin-top: -1em;
     font-size: 1.8em;
-    font-family: 'Nunito Sans', sans-serif;
+    font-family: BigJohn;
 }
 
 .playlist{
@@ -44,6 +45,21 @@ body, html{
     padding-right: 2%;
     display: flex; 
     justify-content: flex-end;
+}
+
+.make_playlist{
+    border: none;
+    background-color: transparent;
+    color: var(--text-color-1);
+    font-size: 1.3em;
+    font-family: BigJohn;
+    border-radius: 8%;
+    cursor: pointer;
+}
+
+.make_playlist:hover{
+    background-color: var(--accent-color);
+    color: var(--text-color-2)
 }
 
 .wrapper2{
@@ -59,7 +75,8 @@ body, html{
 
 .temperature{
     padding-right: 2%;
-    font-size: 1.5em;
+    font-size: 1.8em;
+    font-family: Mystequ;
 }
 
 .recommendations{
@@ -70,14 +87,14 @@ body, html{
 .grid{
     color: var(--text-color-2);
     padding-top: 2%;
-    margin-left: 5%;
+    margin-left: 7%;
 }
 
 .track{
     width: 20%;
     display: inline-block;
     padding: 1em;
-    font-family: 'Nunito Sans', sans-serif;
+    font-family: BigJohn;
 }
 
 .cover{
@@ -95,7 +112,7 @@ body, html{
     }
     
     .temperature{
-        font-size: 1.2em;
+        font-size: 1.5em;
     }    
 
     .track{
