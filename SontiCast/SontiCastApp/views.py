@@ -91,9 +91,10 @@ def results(request):
     forecast = util.request_forecast(request.session["user_id"])
     weather_perms = util.make_parameters(forecast)
     recommendations = util.make_recommendations(request.session["user_id"], weather_perms=weather_perms)
-    weather = "a " + util.describe_weather(forecast, request.session["user_id"])
-    temperature = str(forecast['temp_c']) + "°C / " + str(forecast['temp_f']) + "°F"
+    weather = "a" + util.describe_weather(forecast, request.session["user_id"])
+    temperature = str(forecast['temp_c']) + " °C | " + str(forecast['temp_f']) + " °F"
     icon = forecast['condition']['icon']
+    username = util.request_user_display_name(request.session["user_id"])
     # util.make_playlist(user_id=request.session["user_id"], tracks=recommendations, weather=weather)
 
-    return render(request, "results.html", {'tracks':recommendations, 'weather':weather, 'temperature':temperature, 'icon':icon})    
+    return render(request, "results.html", {'name':username,'tracks':recommendations, 'weather':weather, 'temperature':temperature, 'icon':icon})    

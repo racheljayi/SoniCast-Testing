@@ -7,20 +7,28 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'results.css' %}">
 <body>
-<div class="home">
-    <div class="text">
-        <div class="welcome">Hi {{ name }}</div>
+<div class="text">
+    <div class="wrapper1">
+        <div class="title">Hi {{ name }},</div>
         <div class="subtitle">Here's some music for {{ weather }}.</div>
-        <div class="temperature">{{ temperature }}</div>
     </div>
+    <div class="playlist">
+        <form action="{% url 'index' %}" method="post">
+            {% csrf_token %}
+            <button class="make-playlist" id="submit">+ Create Playlist
+        </form>
+    </div>
+    <div class="wrapper2">
+        <div class="temperature"><img class="icon" src={{icon}} + ".png" /> {{ temperature }}</div>
+    </div>
+</div>
+<div class="recommendations">
     <div class="grid">
         {% for track in tracks %}
         <div class = "track">
             <img class="cover" src={{track.cover_url}} + ".png" />
-            <div class="title">{{track.name}}</div>
-            {% for artist in track.artist %}
-            <span class="artist">{{artist}} </span>
-            {% endfor %}
+            <div class="name"><b>{{track.name}}</b></div>
+            <div class="artist"><i>{{track.artist}}</i></div>
         </div>
         {% endfor %}
     </div>

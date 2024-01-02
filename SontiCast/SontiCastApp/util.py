@@ -98,6 +98,15 @@ def request_forecast(user_id):
     except:
         return({'Error': 'Retriving weather failed'})
 
+# make API call to retrieve user's display name
+def request_user_display_name(user_id):
+    access_token = get_user(user_id).access_token
+    headers['Authorization'] = "Bearer " + access_token
+    response = requests.get(url = BASE_ADDRESS + "/v1/me", headers=headers)
+    try:
+        return response.json()['display_name']
+    except:
+        return({'Error': 'Retriving user failed'})
 
 # make API call to retrieve user's spotify_id from access token
 def request_user_spotify_id(access_token):
@@ -108,6 +117,7 @@ def request_user_spotify_id(access_token):
     except:
         return({'Error': 'Retriving user failed'})
 
+# make API call to retrieve user's timezone
 def request_user_time_zone(user_id):
      user = get_user(user_id)
      params = {
@@ -164,7 +174,7 @@ def make_recommendations(user_id, weather_perms):
                 artists.append(artist["name"])
             uri = track["uri"]
             url = track["album"]["images"][0]["url"]
-            song = Song(name=name, artist=artists, uri=uri, cover_url=url)
+            song = Song(name=name, artist=', '.join(artists), uri=uri, cover_url=url)
             recommendations.append(song)
         return recommendations
     else: return({'Error': 'User not found'})
@@ -181,7 +191,7 @@ def make_parameters(forecast):
     else:
         acousticness += 0.3
     if (forecast['precip_in'] != 0.0):
-            mode = 1    # mode is minor if there is percipitation
+            mode = 0    # mode is minor if there is percipitation
             parameters["target_mode"] = mode
     parameters["target_acousticness"] = acousticness
     parameters["target_tempo"] = tempo
@@ -210,23 +220,30 @@ def make_playlist(user_id, tracks, weather):
 def describe_weather(forecast, user_id):
     code = forecast['condition']['code']
     weather = ""
-    if code in range(1000, 1010):
-        weather = forecast['text']
+    if code == 1000:
+        if forecast['is_day']:
+            weather = " sunny"
+        else:
+            weather = " clear"
+    if code == 1003 or code == 1006:
+        weather = " cloudy"
+    if code == 1009:
+        weather = "n overcast"
     if code == 1030:
-        weather = "misty"
+        weather = " misty"
     if code == 1063 or code in range(1180, 1202) or code in range(1240, 1253) or code in range(1273, 1277):
-        weather = "rainy"
+        weather = " rainy"
     if code == 1066 or code in range(1114, 1118) or code in range(1204, 1226) or code in range(1255, 
         1259) or code in range(1279, 1283):
-        weather == "snowy"
+        weather == " snowy"
     if code in range(1069, 1073) or code == 1237 or code in range(1261, 1265):
-        weather == "freezing"
+        weather == " freezing"
     if code == 1087:
-        weather == "thundery"
+        weather == " thundery"
     if code in range(1135, 1148):
-        weather == "foggy"
+        weather == " foggy"
     if code in range(1150, 1172):
-        weather == "drizzling"
+        weather == " drizzling"
     tz = pytz.timezone(request_user_time_zone(user_id))
     dt = datetime.now(tz)
     day = dt.strftime('%A')
@@ -237,7 +254,6 @@ def describe_weather(forecast, user_id):
     if (time > 16):
         time_of_day = "evening"
     weather = weather + " " + day + " " + time_of_day
-    weather.lower()
     return weather
 
 # def refresh_user_token
