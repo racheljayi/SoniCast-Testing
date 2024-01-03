@@ -13,9 +13,9 @@
         <div class="subtitle">Here's some music for {{ weather }}.</div>
     </div>
     <div class="playlist">
-        <form action="{% url 'index' %}" method="post">
+        <form action="{% url 'make_playlist' %}" method="post">
             {% csrf_token %}
-            <button class="make_playlist" id="submit">+ Create Playlist
+            <button class="make_playlist" id="submit" onClick="made();">+ Create Playlist</button>
         </form>
     </div>
     <div class="wrapper2">
@@ -35,3 +35,13 @@
 </div>
 </body>
 </html>
+<script>
+    var c = "{{clicked}}";
+    if (c == "return false;"){
+        document.getElementById("submit").disabled = true;
+        document.getElementById("submit").innerHTML = "Playlist Created!";
+    }
+    function made() {
+    document.getElementById("submit").innerHTML = "Playlist Created!";
+  }
+</script>

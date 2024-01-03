@@ -91,10 +91,26 @@ def results(request):
     forecast = util.request_forecast(request.session["user_id"])
     weather_perms = util.make_parameters(forecast)
     recommendations = util.make_recommendations(request.session["user_id"], weather_perms=weather_perms)
-    weather = "a" + util.describe_weather(forecast, request.session["user_id"])
-    temperature = str(forecast['temp_c']) + " °C | " + str(forecast['temp_f']) + " °F"
-    icon = forecast['condition']['icon']
-    username = util.request_user_display_name(request.session["user_id"])
-    # util.make_playlist(user_id=request.session["user_id"], tracks=recommendations, weather=weather)
+    request.session["recommendations"] = []
+    for song in recommendations:
+        x = {
+            "name": song.name,
+            "artist": song.artist,
+            "uri": song.uri,
+            "cover-url": song.cover_url,
+        }
+        request.session["recommendations"].append(json.dumps(x))
+    request.session["weather"] = "a" + util.describe_weather(forecast, request.session["user_id"])
+    request.session["temperature"] = str(forecast['temp_c']) + " °C | " + str(forecast['temp_f']) + " °F"
+    request.session["icon"] = forecast['condition']['icon']
+    request.session["username"] = util.request_user_display_name(request.session["user_id"])
+    return render(request, "results.html", {'name':request.session["username"],'tracks':recommendations, 'weather':request.session["weather"], 'temperature':request.session["temperature"], 'icon':request.session["icon"], 'clicked':"made();"})    
 
-    return render(request, "results.html", {'name':username,'tracks':recommendations, 'weather':weather, 'temperature':temperature, 'icon':icon})    
+def make_playlist(request):
+    recommendations = []
+    for song in request.session["recommendations"]:
+        song = json.loads(song)
+        s = util.Song(name=song["name"], artist=song["artist"], uri=song["uri"], cover_url=song["cover-url"])
+        recommendations.append(s)
+    util.make_playlist(user_id=request.session["user_id"], tracks=recommendations, weather=request.session["weather"])
+    return render(request, "results.html", {'name':request.session["username"],'tracks':recommendations, 'weather':request.session["weather"], 'temperature':request.session["temperature"], 'icon':request.session["icon"], 'clicked':"return false;"})    

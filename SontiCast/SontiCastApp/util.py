@@ -36,7 +36,7 @@ def get_user_by_id(user_spotify_id):
         return None
 
 # updates the user's SontiCast playlist, or remove if it if no longer exists
-    # takes user object, array of Song objects, playlist ID, & weather tagline
+    # takes user object, list of Songs, playlist ID, & weather tagline
 def update_playlist(access_token, tracks, playlist='', weather=''):
     # unfortunately the spotify Web API doesn't currently support any way of
         # easily checking if a playlist has been deleted by the owner or not,
@@ -212,9 +212,13 @@ def make_playlist(user_id, tracks, weather):
         })
         playlist = make_API_call(access_token=access_token, endpoint=endpoint, data=data, post=True)["id"]
         user.playlist_id = playlist
-        print(playlist)
+        user.save()
         #update_playlist_cover(access_token=access_token, playlist=playlist)
-        update_playlist(access_token=access_token, tracks=tracks, playlist=playlist)
+        try: 
+            return update_playlist(access_token=access_token, tracks=tracks, playlist=playlist)
+        except: 
+            return{{'Error: error making playlist'}}
+    return{{'Error: error making playlist'}}
 
 # reformats text describing weather
 def describe_weather(forecast, user_id):
@@ -246,14 +250,16 @@ def describe_weather(forecast, user_id):
         weather == " drizzling"
     tz = pytz.timezone(request_user_time_zone(user_id))
     dt = datetime.now(tz)
-    day = dt.strftime('%A')
+    #day = dt.strftime('%A')
     time = int((dt.strftime("%-H")))
     time_of_day = "morning"
     if (time > 11):
         time_of_day = "afternoon"
     if (time > 16):
         time_of_day = "evening"
-    weather = weather + " " + day + " " + time_of_day
+    city = get_user(user_id).city
+    #weather = weather + " " + day + " " + time_of_day + " in " + city
+    weather = weather + " "  + " " + time_of_day + " in " + city
     return weather
 
 # def refresh_user_token
