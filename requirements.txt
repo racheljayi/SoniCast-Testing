@@ -13,8 +13,11 @@ frozenlist==1.4.1
 idna==3.6
 maxminddb==2.5.1
 multidict==6.0.4
+postgres==4.0
 psycopg==3.1.16
 psycopg-binary==3.1.16
+psycopg2-binary==2.9.9
+psycopg2-pool==1.1
 python-ipware==2.0.1
 pytz==2023.3.post1
 redis==5.0.1
