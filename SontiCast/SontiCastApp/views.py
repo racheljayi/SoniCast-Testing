@@ -18,8 +18,7 @@ REDIRECT_URI = "https://sonicast-beta.onrender.com/callback"
 
 # load home page
 def index(request):
-    #random_css = random.choice(['sunrise-stylesheet.css', 'fog-stylesheet.css'])
-    random_css = 'color-schemes/' + 'sunrise-stylesheet.css'
+    random_css = random.choice(['sunrise-stylesheet.css', 'fog-stylesheet.css'])
     return render(request, "index.html", {'random_css': random_css})
 
 # request user authorization
