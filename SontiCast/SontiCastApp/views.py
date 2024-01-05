@@ -106,6 +106,7 @@ def results(request):
     request.session["username"] = util.request_user_display_name(request.session["user_id"])
     return render(request, "results.html", {'name':request.session["username"],'tracks':recommendations, 'weather':request.session["weather"], 'temperature':request.session["temperature"], 'icon':request.session["icon"], 'clicked':"made();"})    
 
+# make playlists & route
 def make_playlist(request):
     recommendations = []
     for song in request.session["recommendations"]:
