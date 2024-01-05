@@ -2,5 +2,5 @@
     --main-color: white;
     --accent-color: #c7a15e;
     --bg-color: black;
-    --bg-image: {% static 'images/sunrise.png' %};
+    --bg-image: url('images/sunrise.png');
   }

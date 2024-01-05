@@ -2,5 +2,5 @@
     --main-color: #2B442A;
     --accent-color: #7AA07A;
     --bg-color: white;
-    --bg-image: {% static 'images/fog.jpg' %};
+    --bg-image: url('images/fog.jpg');
   }
