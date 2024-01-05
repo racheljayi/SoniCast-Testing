@@ -14,7 +14,7 @@ env = environ.Env()
 environ.Env.read_env()
 
 scopes = "ugc-image-upload playlist-modify-private playlist-modify-public user-top-read"
-REDIRECT_URI = "http://localhost:8000/callback"
+REDIRECT_URI = "https://sonicast-beta.onrender.com/callback"
 
 # load home page
 def index(request):
