@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 # exit on error
+
+source env/bin/activate
 set -o errexit
 
 pip install -r requirements.txt
 cd SontiCast
-python manage.py migrate
+python3 manage.py migrate
