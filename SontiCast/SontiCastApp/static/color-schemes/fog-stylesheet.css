@@ -1,5 +1,5 @@
 :root {
     --main-color: white;
     --accent-color: #c7a15e;
-    --bg-image: url("../images/sunrise.png");
+    --bg-image: url("..static/images/sunrise.png");
   }
