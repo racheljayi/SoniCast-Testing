@@ -207,7 +207,7 @@ def make_playlist(user_id, tracks, weather):
         endpoint = "/v1/users/" + user.user_spotify_id + "/playlists"
         data = json.dumps({
             "name": weather,
-            "description": "a SoniCast playlist. Updates every [] hours.",
+            "description": "Thank you for testing Sonicast. I appreciate your feedback!",
             "public": False
         })
         playlist = make_API_call(access_token=access_token, endpoint=endpoint, data=data, post=True)["id"]
