@@ -6,4 +6,5 @@ set -o errexit
 
 pip install -r requirements.txt
 cd SontiCast
+python3 manage.py collectstatic --no-input
 python3 manage.py migrate
